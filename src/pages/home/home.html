@@ -1,17 +1,222 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>Make Reservation</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+    <!--     <ion-list>
+        <ion-item>
+            <ion-label fixed>Name</ion-label>
+            <ion-input [(ngModel)]="Client_Name" name="Client_Name" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed>Phone Number</ion-label>
+            <ion-input [(ngModel)]="Phone_number" name="Phone_number" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed>City of Location</ion-label>
+            <ion-select [(ngModel)]="location_city" name="location_city">
+                <ion-option value="Sowth-West">South-West</ion-option>
+                <ion-option value="2">North</ion-option>
+                <ion-option value="3">South East</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed>Departure</ion-label>
+            <ion-input right [(ngModel)]="departure" name="departure" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed> Destination</ion-label>
+            <ion-input [(ngModel)]="destination" name="destination" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed> Pick Date</ion-label>
+            <ion-input [(ngModel)]="pickUpDate" name="pickUpDate" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed> Number of Days</ion-label>
+            <ion-input [(ngModel)]="noOfDays" name="noOfDays" type="text" placeholder="phone number"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-item>
+            <ion-label fixed> Vehicle </ion-label>
+            <ion-select right [(ngModel)]="vehicleGroup" name="vehicleGroup">
+                <ion-option value="1">Sports</ion-option>
+                <ion-option value="2">Food</ion-option>
+                <ion-option value="3">News</ion-option>
+                <ion-option value="4">Music</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+
+
+
+    <ion-list>
+        <ion-item>
+            <button ion-button block full round outline> Submit </button>
+        </ion-item>
+    </ion-list> -->
+
+    <form #postForm="ngForm" novalidate>
+        <ion-list no-lines>
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="person"></ion-icon> &nbsp; Name</ion-label>
+                    <ion-input [(ngModel)]="reservation.clientName" name="clientName" type="text" #clientName="ngModel" required>
+                    </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="clientName.valid || submitted == false" color="danger" padding-left>
+                    Name is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="mail"></ion-icon> &nbsp; Email</ion-label>
+                    <ion-input [(ngModel)]="reservation.clientEmail" name="clientEmail" type="text" #clientEmail="ngModel" required>
+                    </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="clientEmail.valid || submitted == false" color="danger" padding-left>
+                    Email is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+
+                    <ion-label stacked color="primary">
+                        <ion-icon name="call"></ion-icon> &nbsp; Phone Number</ion-label>
+                    <ion-input [(ngModel)]="reservation.phoneNumber" name="phoneNumber" type="text" #phoneNumber="ngModel" required>
+                    </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="phoneNumber.valid || submitted == false" color="danger" padding-left>
+                    Phone Number is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="map"></ion-icon> &nbsp; Location City</ion-label>
+                    <ion-select right [(ngModel)]="reservation.locationCity" name="locationCity" #locationCity="ngModel" required>
+                        <ion-option value="">--select city--</ion-option>
+                        <ion-option value="1">South-West</ion-option>
+                        <ion-option value="2">North</ion-option>
+                        <ion-option value="3">South-South</ion-option>
+                    </ion-select>
+                </ion-item>
+                <p ion-text [hidden]="vehicleGroup.valid || submitted == false" color="danger" padding-left>
+                    Location City is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="bicycle"></ion-icon> &nbsp; Departure</ion-label>
+                    <ion-input [(ngModel)]="reservation.departure" name="departure" type="text" #departure="ngModel" required>
+                    </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="departure.valid || submitted == false" color="danger" padding-left>
+                    Departure is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="flag"></ion-icon> &nbsp; Destination</ion-label>
+                    <ion-input [(ngModel)]="reservation.destination" name="destination" type="text" #destination="ngModel" required>
+                    </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="destination.valid || submitted == false" color="danger" padding-left>
+                    Destination is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+
+                <ion-item>
+                    <ion-label stacked color="primary">Number of Days</ion-label>
+                    <ion-input [(ngModel)]="reservation.noOfDays" name="noOfDays" type="number" #noOfDays="ngModel" required></ion-input>
+                </ion-item>
+                <p ion-text [hidden]="noOfDays.valid || submitted == false" color="danger" padding-left>
+                    Field is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary"> Vehicle</ion-label>
+                    <ion-select right [(ngModel)]="reservation.vehicleGroup" name="vehicleGroup" #vehicleGroup="ngModel" required>
+                        <ion-option value="">--select vehicle--</ion-option>
+                        <ion-option value="1">Toyota Camry</ion-option>
+                        <ion-option value="2">Ford Edge</ion-option>
+                        <ion-option value="3">Ford Explorer</ion-option>
+                    </ion-select>
+                </ion-item>
+                <p ion-text [hidden]="vehicleGroup.valid || submitted == false" color="danger" padding-left>
+                    Vehicle is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="date"></ion-icon> &nbsp; PickUp Date</ion-label>
+                    <ion-datetime name="pickUpDate" displayFormat="YYYY-MM-DD" max="2020" [(ngModel)]="reservation.pickUpDate" #pickUpDate="ngModel" required></ion-datetime>
+                </ion-item>
+                <p ion-text [hidden]="pickUpDate.valid || submitted == false" color="danger" padding-left>
+                    Pick Up Date is required
+                </p>
+            </ion-card>
+
+            <ion-card>
+                <ion-item>
+                    <ion-label stacked color="primary">
+                        <ion-icon name="time"></ion-icon> &nbsp; Pick Up Time</ion-label>
+                    <ion-datetime name="pickUpTime" displayFormat="hh:mm:ss" [(ngModel)]="reservation.pickUpTime" #pickUpTime="ngModel" required></ion-datetime>
+                </ion-item>
+                <p ion-text [hidden]="pickUpTime.valid || submitted == false" color="danger" padding-left>
+                    Pick Up Time is required
+                </p>
+            </ion-card>
+
+
+
+        </ion-list>
+
+        <div padding>
+            <button ion-button round (click)="getPosts(postForm)" type="submit" block>Make Reservations</button>
+        </div>
+    </form>
+
+
+
 </ion-content>
+
+
+<!-- pickUpDate= '2017-08-08T00:00:00'; -->

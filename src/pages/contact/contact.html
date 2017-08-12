@@ -1,17 +1,51 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Contact
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>
+            Reservation
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+
+    <ion-card color="bkg">
+        <ion-item-divider sticky color="bkg">
+            <div ion-item style="font-size:16px;margin:auto;height:100px;min-width:200px; ">
+                <ion-avatar item-start>
+                    <ion-icon style="color:#ccc;font-size:70px;" name="contact"></ion-icon>
+                    <!--   <img src="assets/Ayo.png" alt="Speaker profile pic"> -->
+                </ion-avatar>
+                {{listdata.nonCreditClientName}}
+
+                <p style="font-size:16px;margin:auto;">
+                    <ion-icon color="primary" name="pin"></ion-icon>&nbsp; {{listdata.office.region}}</p>
+
+
+            </div>
+        </ion-item-divider>
+        <ion-item-divider sticky [hidden]="reservationdata.length == 0" style="height:50px;font-size:14px;">
+            {{listdata.nonCreditClientName}} made {{reservationdata.length}} reservation
+        </ion-item-divider>
+
+        <ion-item-divider sticky [hidden]="reservationdata.length > 0" style="height:30px;font-size:14px;">
+            {{listdata.nonCreditClientName}} made {{reservationdata.length}} reservations
+        </ion-item-divider>
+
+        <ion-card *ngFor="let reservationtriplist of reservationdata;" style="font-size:15px;" padding>
+
+            <ion-label stacked>
+                <ion-icon color="primary" style="font-size:20px;" name="bicycle"> </ion-icon>&nbsp; Departure: &nbsp; {{reservationtriplist.departure}}</ion-label>
+            <ion-label stacked>
+                <ion-icon color="primary" style="font-size:20px;" name="flag"> </ion-icon>&nbsp; Destination: &nbsp; {{reservationtriplist.destination}}</ion-label>
+            <ion-label stacked>
+                <ion-icon color="primary" style="font-size:20px;" name="time"></ion-icon> &nbsp; Date and Time: &nbsp; {{reservationtriplist.pickUpDate}} </ion-label>
+            <ion-label stacked>
+                <ion-icon color="primary" style="font-size:20px;" name="car"></ion-icon> &nbsp; Vechile Type &nbsp; {{reservationtriplist.vehicleType}} </ion-label>
+
+
+        </ion-card>
+
+    </ion-card>
+
+
 </ion-content>

@@ -1,11 +1,322 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      About
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar no-border-bottom color="primary">
+
+        <ion-segment [(ngModel)]="segment" color="light">
+            <ion-segment-button value="submit">
+                New Reservation
+            </ion-segment-button>
+            <ion-segment-button value="list" (ionChange)="updateReservationList()">
+                Reservations
+            </ion-segment-button>
+        </ion-segment>
+
+
+
+        <ion-toolbar no-border-top>
+            <ion-card>
+                <img src="assets/instanta.png" width="176" height="48" />
+            </ion-card>
+        </ion-toolbar>
+    </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+
+<ion-content>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content color="bkg"></ion-refresher-content>
+    </ion-refresher>
+
+
+    <ion-card *ngIf="segment === 'submit'" color="bkg">
+        <div style="font-size: 16px; width:180px; margin:auto; height:30px;color: #000; padding-top:10px"> Make New Reservation </div>
+        <form #postForm="ngForm" novalidate class="list">
+            <ion-list no-lines>
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="person"></ion-icon> &nbsp; Name</ion-label>
+                        <ion-input [(ngModel)]="reservation.clientName" name="clientName" type="text" #clientName="ngModel" required>
+                        </ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="clientName.valid || submitted == false" color="danger" padding-left>
+                        Name is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="mail"></ion-icon> &nbsp; Email</ion-label>
+                        <ion-input [(ngModel)]="reservation.clientEmail" name="clientEmail" type="text" #clientEmail="ngModel" required>
+                        </ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="clientEmail.valid || submitted == false" color="danger" padding-left>
+                        Email is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+
+                        <ion-label stacked color="primary">
+                            <ion-icon name="call"></ion-icon> &nbsp; Phone Number</ion-label>
+                        <ion-input [(ngModel)]="reservation.phoneNumber" name="phoneNumber" type="number" #phoneNumber="ngModel" required>
+                        </ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="phoneNumber.valid || submitted == false" color="danger" padding-left>
+                        Phone Number is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="map"></ion-icon> &nbsp; Location City</ion-label>
+                        <ion-select right [(ngModel)]="reservation.locationCity" name="locationCity" #locationCity="ngModel" required>
+                            <ion-option value="">--select city--</ion-option>
+                            <ion-option value="South-West">South-West</ion-option>
+                            <ion-option value="North">North</ion-option>
+                            <ion-option value="South-South">South-South</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <p ion-text [hidden]="vehicleGroup.valid || submitted == false" color="danger" padding-left>
+                        Location City is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="bicycle"></ion-icon> &nbsp; Departure</ion-label>
+                        <ion-input [(ngModel)]="reservation.departure" name="departure" type="text" #departure="ngModel" required>
+                        </ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="departure.valid || submitted == false" color="danger" padding-left>
+                        Departure is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="flag"></ion-icon> &nbsp; Destination</ion-label>
+                        <ion-input [(ngModel)]="reservation.destination" name="destination" type="text" #destination="ngModel" required>
+                        </ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="destination.valid || submitted == false" color="danger" padding-left>
+                        Destination is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="clipboard"></ion-icon> &nbsp; Number of Days</ion-label>
+                        <ion-input [(ngModel)]="reservation.noOfDays" name="noOfDays" type="number" #noOfDays="ngModel" required></ion-input>
+                    </ion-item>
+                    <p ion-text [hidden]="noOfDays.valid || submitted == false" color="danger" padding-left>
+                        Field is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="car"></ion-icon> &nbsp; Vehicle</ion-label>
+                        <ion-select right [(ngModel)]="reservation.vehicleGroup" name="vehicleGroup" #vehicleGroup="ngModel" required>
+                            <ion-option value="">--select vehicle--</ion-option>
+                            <ion-option value="1">Toyota Camry</ion-option>
+                            <ion-option value="2">Ford Edge</ion-option>
+                            <ion-option value="3">Ford Explorer</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <p ion-text [hidden]="vehicleGroup.valid || submitted == false" color="danger" padding-left>
+                        Vehicle is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="date"></ion-icon>
+                            <ion-icon name="calendar"></ion-icon> &nbsp; PickUp Date</ion-label>
+                        <ion-datetime name="pickUpDate" displayFormat="YYYY-MM-DD" max="2020" [(ngModel)]="reservation.pickUpDate" #pickUpDate="ngModel" required></ion-datetime>
+                    </ion-item>
+                    <p ion-text [hidden]="pickUpDate.valid || submitted == false" color="danger" padding-left>
+                        Pick Up Date is required
+                    </p>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-label stacked color="primary">
+                            <ion-icon name="time"></ion-icon> &nbsp; Pick Up Time</ion-label>
+                        <ion-datetime name="pickUpTime" displayFormat="hh:mm:ss" [(ngModel)]="reservation.pickUpTime" #pickUpTime="ngModel" required></ion-datetime>
+                    </ion-item>
+                    <p ion-text [hidden]="pickUpTime.valid || submitted == false" color="danger" padding-left>
+                        Pick Up Time is required
+                    </p>
+                </ion-card>
+
+
+
+            </ion-list>
+
+            <div padding>
+                <button ion-button round (click)="getPosts(postForm)" type="submit" block>Make Reservations</button>
+            </div>
+        </form>
+
+    </ion-card>
+
+
+
+    <ion-card *ngIf="segment === 'list'" color="bkg">
+        <div style="font-size: 14px; width:150px; margin:auto; height:30px;color: #000; padding-top:10px"> List of Reservations </div>
+
+        <ion-card *ngFor="let list of data">
+            <div ion-item style="font-size:12px;margin:auto; width:280px;">
+                <ion-avatar item-start>
+                    <ion-icon style="color:#ccc;font-size:70px;" name="contact"></ion-icon>
+                    <!--   <img src="assets/Ayo.png" alt="Speaker profile pic"> -->
+                </ion-avatar>
+                <span style="font-size:14px;"> {{list.nonCreditClientName}}</span>
+                <p style="font-size:13px;margin:auto;">
+                    <ion-icon color="primary" name="mail"></ion-icon>&nbsp; {{list.emailAddress}}</p>
+                <p style="font-size:13px;margin:auto;">
+                    <ion-icon name="call"></ion-icon>&nbsp; {{list.phoneNumber}}</p>
+
+
+
+            </div>
+            <div style="width:120px;margin:0 auto;margin-bottom:5px;"> <button ion-button (click)="ViewReservation(list,list.reservationTripList)" small outline left style="font-size:14px;text-transform:capitalize">View Reservation</button></div>
+        </ion-card>
+
+    </ion-card>
+
+
+
+
+
+    <!-- <div class="row">
+        <div class="col">Name </div>
+        <div class="col">Email Address </div>
+        <div class="col">Phone Number </div>
+        <div class="col">Departure </div>
+        <div class="col">Destination </div>
+        <div class="col">---Location City--- </div>
+        <div class="col">pick Up Date </div>
+
+        <div class="col">-------</div>
+        <div class="col">Reserved Vehicle</div>
+        <div class="col">Vehicle Category</div>
+
+
+    </div>
+    <div class="row" *ngFor="let list of data">
+        <div class="col">{{list.nonCreditClientName}}</div>
+        <div class="col">{{list.emailAddress}}</div>
+        <div class="col">{{list.phoneNumber}}</div>
+
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">
+            {{reservationtriptist.departure}}
+        </div>
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">
+            <div>{{reservationtriptist.destination}}</div>
+        </div>
+        <div class="col">
+            <div>{{list.office.region}}</div>
+        </div>
+
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">
+            <div>{{reservationtriptist.pickUpDate}}</div>
+        </div>
+
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">
+            <div>----------------</div>
+        </div>
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">
+            <div>{{reservationtriptist.vehicleType}}</div>
+        </div>
+
+
+        <div class="col" *ngFor="let reservationtriptist of list.reservationTripList;">{{reservationtriptist.vehicleType}}
+        </div>
+    </div> -->
+
+
 
 </ion-content>
+
+
+
+<!--
+        <!-- <div>vehiclegroup category:{{reservationtriptist.vehicle}}</div> -->
+<!--   <div class="row" *ngFor="let vehicLe of reservationtriptist.vehicle;">
+               <div class="row" *ngFor="let vehiclegroup of vehicLe.vehicleGroup">
+                </div>
+            </div> -->
+
+
+<!--
+<div class="row" *ngFor="let list of data; let i = index">
+        <div class="col">Client Email Address :{{list.emailAddress}}</div>
+        <div class="col">Client Name :{{list.nonCreditClientName}}</div>
+        <div class="col">
+            <div class="row">
+                <div>Address : {{list.office.address}}</div>
+                <div>code :{{list.office.code}}</div>
+                <div>email :{{list.office.email}}</div>
+                <div>hash :{{list.office.hash}}</div>
+                <div>id :{{list.office.id}}</div>
+                <div>name :{{list.office.name}}</div>
+                <div>Lenght :{{list.office.officeLocations}}</div>
+                <div>Phone :{{list.office.phone}}</div>
+                <div>region :{{list.office.region}}</div>
+                <div>status :{{list.office.status}}</div>
+
+            </div>
+
+        </div>
+        <div class="col">Client Number :{{list.phoneNumber}}</div>
+        <div class="col">
+
+            <div class="row" *ngFor="let reservationtriptist of list.reservationTripList;let forvehicle of list.reservationTripList[i];let j = index">
+                <div>Client Reservation departure :{{reservationtriptist.departure}}</div>
+                <div>Client Destination :{{reservationtriptist.destination}}</div>
+                <div>expectedEndDate :{{reservationtriptist.expectedEndDate}}</div>
+                <div>hash :{{reservationtriptist.hash}}</div>
+                <div>id :{{reservationtriptist.id}}</div>
+                <div>noOfPassenger :{{reservationtriptist.noOfPassenger}}</div>
+                <div>Client Reservation pickUp Date :{{reservationtriptist.pickUpDate}}</div>
+                <div>reservation :{{reservationtriptist.reservation}}</div>
+                <div class="row" *ngFor="let tripservices of reservationtriptist.tripServices">
+                    <div>tripservice amount :{{tripservices.amount}}</div>
+                    <div>tripservice hash :{{tripservices.hash}}</div>
+                    <div>tripservice id :{{tripservices.id}}</div>
+                    <div>tripservice quantity :{{tripservices.quantity}}</div>
+                    <div>tripservice reservationTrip :{{tripservices.reservationTrip}}</div>
+                    <div>tripservice serviceType :{{tripservices.serviceType}}</div>
+                    <div>tripservice unitPrice :{{tripservices.unitPrice}}</div>
+
+                </div>
+                console.log(this.data[4].reservationTripList[0].vehicle.vehicleGroup.make);
+                <div class="row" *ngFor="let vehicLe of forvehicle.vehicle ; let j = index;">
+                    <div> code:{{vehicLe.code}}</div>
+
+                   <div class="row" *ngFor="let vehiclegroup of vehicLe.vehicleGroup">
+
+                        <div>vehiclegroup category:{{vehiclegroup.category}}</div>
+                        <div>vehiclegroup model:{{vehiclegroup.model}}</div>
+                        <div>vehiclegroup name :{{vehiclegroup.name}}</div>
+
+                    </div>
+
+                </div>
+                <div>vehicleType :{{reservationtriptist.vehicleType}}</div>
+                <div>version :{{reservationtriptist.version}}</div>
+
+            </div>
+        </div>
+    </div> -->
